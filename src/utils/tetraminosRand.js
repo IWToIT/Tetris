@@ -1,4 +1,6 @@
-export const tetraminons = {
+import { BOARD_WIDTH } from "./gameBoard";
+
+export const tetraminos = {
   // 0: { shape: [[0]], color: "0,0,0" },
   L: { shape: [
                 [0, "L", 0],
@@ -51,8 +53,18 @@ export const tetraminons = {
   },
 };
 
-export const randomTetramino = () => {
-  const tetraminos = ['I', 'O', 'T', 'S', 'Z', 'J', 'L']
-  const rand = tetraminos[Math.floor(Math.random() * tetraminons.length)]
-  return tetraminons[rand]
+export const createTetramino = () => {
+  const tetraminoKeys = Object.keys(tetraminos)
+  const rand = tetraminoKeys[Math.floor(Math.random() * tetraminoKeys.length)]
+  const selectedTetramino = tetraminos[rand];
+  return {
+    shape: selectedTetramino.shape,
+    x: Math.floor(BOARD_WIDTH/2) - 1,
+    y: 0,
+    type: rand,
+    color: selectedTetramino.color,
+  }
 }
+
+const newTetramino = createTetramino();
+console.log(newTetramino);
