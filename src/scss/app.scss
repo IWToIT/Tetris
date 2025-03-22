@@ -43,3 +43,15 @@ body {
     }
   }
 }
+
+.board-cell,
+.next-tetramino-cell {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+}
+
+.board-cell.filled,
+.next-tetramino-cell.filled {
+  border: 1px solid #000;
+}
