@@ -1,7 +1,6 @@
 import { BOARD_WIDTH } from "./gameBoard";
 
 export const tetraminos = {
-  // 0: { shape: [[0]], color: "0,0,0" },
   L: { shape: [
                 [0, "L", 0],
                 [0, "L", 0],

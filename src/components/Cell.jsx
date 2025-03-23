@@ -11,11 +11,16 @@ const Cell = ({ type }) => {
     Z: "red",
   };
 
+  const cellType = typeof type === "object" ? type.type : type;
+  const cellColor = typeof type === "object" ? type.color : colors[cellType];
+
+  const isFilled = cellType && cellType !== "0";
+
   return (
     <div
-      className={`cell ${type ? "filled" : ""}`}
+      className={`cell ${isFilled ? "filled" : ""}`}
       style={{
-        backgroundColor: type && type !== "0" ? colors[type] : "transparent",
+        backgroundColor: isFilled ? cellColor : "transparent",
       }}
     ></div>
   );
