@@ -219,7 +219,7 @@ function App() {
   );
 }
 
-const checkCollizion = (board, tetramino, moveX = 0, moveY = 0) => {
+export const checkCollizion = (board, tetramino, moveX = 0, moveY = 0) => {
   const { shape, x, y } = tetramino;
 
   for (let row = 0; row < shape.length; row++) {
