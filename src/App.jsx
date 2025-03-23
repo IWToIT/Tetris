@@ -13,29 +13,6 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(800);
 
-  const checkCollizion = (board, tetramino, moveX = 0, moveY = 0) => {
-    const { shape, x, y } = tetramino;
-
-    for (let row = 0; row < shape.length; row++) {
-      for (let col = 0; col < shape[row].length; col++) {
-        if (shape[row][col] !== 0) {
-          const newX = x + col + moveX;
-          const newY = y + row + moveY;
-
-          if (newX < 0 || newX >= board[0].length || newY >= board.length) {
-            return true;
-          }
-
-          if (newY >= 0 && board[newY][newX] !== "0") {
-            return true;
-          }
-        }
-      }
-    }
-
-    return false;
-  };
-
   const moveDown = useCallback(() => {
     if (!isPlaying) return;
 
@@ -192,5 +169,28 @@ function App() {
     </div>
   );
 }
+
+export const checkCollizion = (board, tetramino, moveX = 0, moveY = 0) => {
+  const { shape, x, y } = tetramino;
+
+  for (let row = 0; row < shape.length; row++) {
+    for (let col = 0; col < shape[row].length; col++) {
+      if (shape[row][col] !== 0) {
+        const newX = x + col + moveX;
+        const newY = y + row + moveY;
+
+        if (newX < 0 || newX >= board[0].length || newY >= board.length) {
+          return true;
+        }
+
+        if (newY >= 0 && board[newY][newX] !== "0") {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+};
 
 export default App;
