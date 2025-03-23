@@ -135,6 +135,7 @@ function App() {
           break;
         case "ArrowDown":
           setSpeed(100);
+          // нужно будет отслеживать нажата ли кнопка вниз в тот момент, когда мы добавляем упавшую фигуру на доску
           setScore((prev) => prev + 1);
           break;
         case "ArrowUp":
@@ -163,11 +164,13 @@ function App() {
     let interval;
     if (isPlaying) {
       interval = setInterval(() => {
+        // dispatch({type: 'move-down'}) //использовать useReducer
         moveDown();
       }, speed);
     }
     return () => clearInterval(interval);
   }, [isPlaying, speed, moveDown]);
+
 
   const handleStart = () => {
     setIsPlaying(true);
@@ -193,7 +196,7 @@ function App() {
           ) {
             displayBoard[boardY][boardX] = {
               type: tetramino.type,
-              color: tetramino.color
+              color: tetramino.color,
             };
           }
         }
