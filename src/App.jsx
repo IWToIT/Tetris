@@ -8,60 +8,19 @@ import "./scss/app.scss";
 import { createBoard } from "./utils/gameBoard";
 import { createTetramino } from "./utils/tetraminosRand";
 
-function moveDownReducer(state, action) {
-  switch (action.type) {
-    case "move-down":
-      return {
-        ...state,
-        tetramino: {
-          ...state.tetramino,
-          y: state.tetramino.y + 1,
-        },
-      };
-    case "move-left":
-      return {
-        ...state,
-        tetramino: {
-          ...state.tetramino,
-          x: state.tetramino.x - 1,
-        },
-      };
-    case "move-right":
-      return {
-        ...state,
-        tetramino: {
-          ...state.tetramino,
-          x: state.tetramino.x + 1,
-        },
-      };
-    case "set-tetramino":
-      return {
-        ...state,
-        tetramino: action.payload,
-      };
-    case "rotate":
-      return {
-        ...state,
-        tetramino: {
-          ...state.tetramino,
-          shape: action.payload,
-        },
-      };
-    default:
-      return state;
-  }
-}
+
 
 function App() {
   const [board, setBoard] = useState(createBoard);
   const [nextTetramino, setNextTetramino] = useState(createTetramino);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(800);
   const [score, setScore] = useState(0);
   const [tetraminoState, tetraminoDispatch] = useReducer(moveDownReducer, {
     tetramino: createTetramino(),
+    isPlaying: false,
   });
-  const { tetramino } = tetraminoState;
+
+  const { tetramino, isPlaying } = tetraminoState;
 
   const clearLines = (board) => {
     let linesCleared = 0;
@@ -123,7 +82,7 @@ function App() {
       setNextTetramino(createTetramino());
 
       if (checkCollizion(newBoard, nextTetramino)) {
-        setIsPlaying(false);
+        tetraminoDispatch({type: "set-isPlaying", isPlaying: false});
         alert("Game Over!");
       }
     }
@@ -197,6 +156,7 @@ function App() {
 
   useEffect(() => {
     let interval;
+    console.log(1);
     if (isPlaying) {
       interval = setInterval(() => {
         moveDown();
@@ -206,7 +166,7 @@ function App() {
   }, [isPlaying, speed, moveDown]);
 
   const handleStart = () => {
-    setIsPlaying(true);
+    tetraminoDispatch({type: "set-isPlaying", isPlaying: true});
     tetraminoDispatch({ type: "reset-tetramino" });
     setBoard(createBoard());
     setSpeed(800);

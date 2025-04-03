@@ -8,8 +8,10 @@ describe('checkCollizion', () => {
   it('no collizion when figure in the center of the board', () => {
     // arrange
     const board = createBoard();
-    const tetramino = createTetramino();
-    tetramino.y = Math.floor(BOARD_HEIGHT/2) - 1;
+    const tetramino = createTetramino({
+      x: Math.floor(BOARD_WIDTH/2) - 1,
+      y: Math.floor(BOARD_HEIGHT/2) - 1
+    });
     
     // act
     const hasCollizion = checkCollizion(board, tetramino, 0, 1) 
@@ -22,8 +24,9 @@ describe('checkCollizion', () => {
   it('collision when figure is left of board and moving left', () => {
     // arrange
     const board = createBoard();
-    const tetramino = createTetramino();
-    tetramino.x = -1;
+    const tetramino = createTetramino({
+      x: -1
+    });
     
     // act
     const hasCollizion = checkCollizion(board, tetramino, -1, 0) 
@@ -35,8 +38,9 @@ describe('checkCollizion', () => {
   it('collision when figure is right of board and moving right', () => {
     // arrange
     const board = createBoard();
-    const tetramino = createTetramino();
-    tetramino.x = BOARD_WIDTH;
+    const tetramino = createTetramino({
+      x: BOARD_WIDTH
+    });
     
     // act
     const hasCollizion = checkCollizion(board, tetramino, 1, 0) 
@@ -48,8 +52,9 @@ describe('checkCollizion', () => {
   it('collision when figure is below board and moving dowm', () => {
     // arrange
     const board = createBoard();
-    const tetramino = createTetramino();
-    tetramino.x = BOARD_HEIGHT;
+    const tetramino = createTetramino({
+      x: BOARD_HEIGHT,
+    });
     
     // act
     const hasCollizion = checkCollizion(board, tetramino, 0, 1) 
