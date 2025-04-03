@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useReducer } from "react";
 import Board from "./components/Board";
 import Display from "./components/Display";
 import StartBtn from "./components/StartBtn";
@@ -8,13 +8,60 @@ import "./scss/app.scss";
 import { createBoard } from "./utils/gameBoard";
 import { createTetramino } from "./utils/tetraminosRand";
 
+function moveDownReducer(state, action) {
+  switch (action.type) {
+    case "move-down":
+      return {
+        ...state,
+        tetramino: {
+          ...state.tetramino,
+          y: state.tetramino.y + 1,
+        },
+      };
+    case "move-left":
+      return {
+        ...state,
+        tetramino: {
+          ...state.tetramino,
+          x: state.tetramino.x - 1,
+        },
+      };
+    case "move-right":
+      return {
+        ...state,
+        tetramino: {
+          ...state.tetramino,
+          x: state.tetramino.x + 1,
+        },
+      };
+    case "set-tetramino":
+      return {
+        ...state,
+        tetramino: action.payload,
+      };
+    case "rotate":
+      return {
+        ...state,
+        tetramino: {
+          ...state.tetramino,
+          shape: action.payload,
+        },
+      };
+    default:
+      return state;
+  }
+}
+
 function App() {
   const [board, setBoard] = useState(createBoard);
-  const [tetramino, setTetramino] = useState(createTetramino);
   const [nextTetramino, setNextTetramino] = useState(createTetramino);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(800);
   const [score, setScore] = useState(0);
+  const [tetraminoState, tetraminoDispatch] = useReducer(moveDownReducer, {
+    tetramino: createTetramino(),
+  });
+  const { tetramino } = tetraminoState;
 
   const clearLines = (board) => {
     let linesCleared = 0;
@@ -41,10 +88,7 @@ function App() {
     if (!isPlaying) return;
 
     if (!checkCollizion(board, tetramino, 0, 1)) {
-      setTetramino((prev) => ({
-        ...prev,
-        y: prev.y + 1,
-      }));
+      tetraminoDispatch({ type: "move-down" });
     } else {
       const newBoard = board.map((row) => [...row]);
       tetramino.shape.forEach((row, yOffset) => {
@@ -75,7 +119,7 @@ function App() {
         setScore((prev) => prev + points);
       }
 
-      setTetramino(nextTetramino);
+      tetraminoDispatch({ type: "set-tetramino", payload: nextTetramino });
       setNextTetramino(createTetramino());
 
       if (checkCollizion(newBoard, nextTetramino)) {
@@ -89,10 +133,7 @@ function App() {
     if (!isPlaying) return;
 
     if (!checkCollizion(board, tetramino, -1, 0)) {
-      setTetramino((prev) => ({
-        ...prev,
-        x: prev.x - 1,
-      }));
+      tetraminoDispatch({ type: "move-left" });
     }
   }, [isPlaying, board, tetramino]);
 
@@ -100,10 +141,7 @@ function App() {
     if (!isPlaying) return;
 
     if (!checkCollizion(board, tetramino, 1, 0)) {
-      setTetramino((prev) => ({
-        ...prev,
-        x: prev.x + 1,
-      }));
+      tetraminoDispatch({ type: "move-right" });
     }
   }, [isPlaying, board, tetramino]);
 
@@ -115,10 +153,7 @@ function App() {
     );
 
     if (!checkCollizion(board, { ...tetramino, shape: rotatedShape })) {
-      setTetramino((prev) => ({
-        ...prev,
-        shape: rotatedShape,
-      }));
+      tetraminoDispatch({ type: "rotate", payload: rotatedShape });
     }
   }, [isPlaying, board, tetramino]);
 
@@ -164,17 +199,15 @@ function App() {
     let interval;
     if (isPlaying) {
       interval = setInterval(() => {
-        // dispatch({type: 'move-down'}) //использовать useReducer
         moveDown();
       }, speed);
     }
     return () => clearInterval(interval);
   }, [isPlaying, speed, moveDown]);
 
-
   const handleStart = () => {
     setIsPlaying(true);
-    setTetramino(createTetramino());
+    tetraminoDispatch({ type: "reset-tetramino" });
     setBoard(createBoard());
     setSpeed(800);
     setScore(0);
@@ -244,21 +277,5 @@ export const checkCollizion = (board, tetramino, moveX = 0, moveY = 0) => {
 
   return false;
 };
-
-// describe("checkCollizion", () => {
-//   test("should return true if tetramino collides with the board", () => {
-//     // AAA
-//     // Создаём доску
-//     // Создаём тетрамино
-//     // Arrange — подготовка данных
-
-//     // Act — вызываем функцию, которую хотим протестировать
-//     // const hasCollizion = checkCollizion(board, tetramino)
-
-//     // Assert — проверяем результат
-//     // expect(hasCollizion).toBe(true);
-
-//   });
-// });
 
 export default App;
