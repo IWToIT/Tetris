@@ -113,6 +113,9 @@ describe("sortFunc", () => {
     const expected = [-4, -3, -2, -1];
     expect(sort(input)).toEqual(expected);
   });
+  it("negative and positive numbers", () => {
+    //добавить
+  })
   it("empty array check", () => {
     expect(sort([])).toEqual([]);
   });
