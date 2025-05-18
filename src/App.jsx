@@ -7,20 +7,13 @@ import "./scss/app.scss";
 
 import { createBoard } from "./utils/gameBoard";
 import { createTetramino } from "./utils/tetraminosRand";
-
-
+import { tetrtaminoReducer, initialState } from "./utils/tetrisReducer";
 
 function App() {
-  const [board, setBoard] = useState(createBoard);
-  const [nextTetramino, setNextTetramino] = useState(createTetramino);
+  const [tetraminoState, tetraminoDispatch] = useReducer(tetrtaminoReducer, initialState)
+  const { board, tetramino, nextTetramino, isPlaying } = tetraminoState;
   const [speed, setSpeed] = useState(800);
   const [score, setScore] = useState(0);
-  const [tetraminoState, tetraminoDispatch] = useReducer(moveDownReducer, {
-    tetramino: createTetramino(),
-    isPlaying: false,
-  });
-
-  const { tetramino, isPlaying } = tetraminoState;
 
   const clearLines = (board) => {
     let linesCleared = 0;
@@ -71,7 +64,7 @@ function App() {
       });
 
       const { newBoard: clearedBoard, linesCleared } = clearLines(newBoard);
-      setBoard(clearedBoard);
+      tetraminoDispatch({ type: "set-board", payload: clearedBoard });
 
       if (linesCleared > 0) {
         const points = [0, 100, 300, 500, 800][linesCleared];
@@ -79,10 +72,10 @@ function App() {
       }
 
       tetraminoDispatch({ type: "set-tetramino", payload: nextTetramino });
-      setNextTetramino(createTetramino());
+      tetraminoDispatch({ type: "set-nextTetramino", payload: createTetramino()});
 
-      if (checkCollizion(newBoard, nextTetramino)) {
-        tetraminoDispatch({type: "set-isPlaying", isPlaying: false});
+      if (checkCollizion(clearedBoard, nextTetramino)) {
+        tetraminoDispatch({ type: "set-isPlaying", payload: false });
         alert("Game Over!");
       }
     }
@@ -166,11 +159,7 @@ function App() {
   }, [isPlaying, speed, moveDown]);
 
   const handleStart = () => {
-    tetraminoDispatch({type: "set-isPlaying", isPlaying: true});
-    tetraminoDispatch({ type: "reset-tetramino" });
-    setBoard(createBoard());
-    setSpeed(800);
-    setScore(0);
+    tetraminoDispatch({ type: "reset-game" });
   };
 
   const displayBoard = board.map((row) => [...row]);
