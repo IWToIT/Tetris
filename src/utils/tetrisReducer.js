@@ -53,8 +53,15 @@ export function tetrtaminoReducer(state, action) {
           });
         });
 
-        const { newBoard: clearedBoard, linesCleared } = clearLines(newBoard);
+        const { newBoard: clearedBoard } = clearLines(newBoard);
 
+        return {
+          ...state,
+          isPlaying: !checkCollizion(clearedBoard, state.nextTetramino), // true
+          board: clearedBoard,
+          tetramino: state.nextTetramino,
+          nextTetramino: createTetramino(),
+        };
         // TODO: реализовать подсчет очков
         // if (linesCleared > 0) {
         //   const points = [0, 100, 300, 500, 800][linesCleared];
@@ -64,13 +71,6 @@ export function tetrtaminoReducer(state, action) {
 
       // TODO: перенести в App.jsx
       // alert("Game Over!");
-      return {
-        ...state,
-        isPlaying: !checkCollizion(clearedBoard, nextTetramino), // true
-        board: clearedBoard,
-        tetramino: state.nextTetramino,
-        nextTetramino: createTetramino(),
-      };
     }
     case "move-left":
       return {

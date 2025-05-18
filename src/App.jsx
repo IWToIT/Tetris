@@ -3,6 +3,7 @@ import Board from "./components/Board";
 import Display from "./components/Display";
 import StartBtn from "./components/StartBtn";
 import NextTetramino from "./components/NextTetramino";
+import { checkCollizion } from "./utils/utils";
 import "./scss/app.scss";
 
 import { createBoard } from "./utils/gameBoard";
@@ -18,10 +19,6 @@ function App() {
   const { board, tetramino, nextTetramino, isPlaying } = tetraminoState;
   const [speed, setSpeed] = useState(800);
   const [score, setScore] = useState(0);
-
-  useWhyDidYouUpdate("App", { 
-    moveDown: tetraminoDispatch 
-  });
 
   const moveLeft = useCallback(() => {
     if (!isPlaying) return;
