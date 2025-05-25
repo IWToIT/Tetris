@@ -9,6 +9,8 @@ export const initialState = {
   isPlaying: false,
   score: 0,
   speed: 800,
+  turbo: false,
+  totalLinesCleared: 0,
 };
 
 /**
@@ -17,7 +19,7 @@ export const initialState = {
  * - всегда возвращает новый объект состояния (почему?)
  *
  */
-export function tetrtaminoReducer(state, action) {
+export function tetraminoReducer(state, action) {
   switch (action.type) {
     case "move-down": {
       if (!state.isPlaying) return { ...state };
@@ -53,7 +55,17 @@ export function tetrtaminoReducer(state, action) {
           });
         });
 
-        const { newBoard: clearedBoard } = clearLines(newBoard);
+        const { newBoard: clearedBoard, linesCleared } = clearLines(newBoard);
+        console.log("Линий очищено:", linesCleared);
+        const points = [0, 100, 300, 500, 800][linesCleared];
+        const newScore = state.score + points;
+
+        const newTotalLinesCleared = state.totalLinesCleared + linesCleared;
+        const newSpeed =
+          newTotalLinesCleared >= 4
+            ? state.speed - state.speed * 0.1
+            : state.speed;
+        console.log(state.totalLinesCleared);
 
         return {
           ...state,
@@ -61,8 +73,11 @@ export function tetrtaminoReducer(state, action) {
           board: clearedBoard,
           tetramino: state.nextTetramino,
           nextTetramino: createTetramino(),
+          score: newScore,
+          speed: newSpeed,
+          totalLinesCleared: newTotalLinesCleared,
         };
-        // TODO: реализовать подсчет очков
+        // TODO: реализовать подсчет очков +
         // if (linesCleared > 0) {
         //   const points = [0, 100, 300, 500, 800][linesCleared];
         //   setScore((prev) => prev + points);
@@ -121,6 +136,28 @@ export function tetrtaminoReducer(state, action) {
         ...initialState,
         isPlaying: true,
       };
+    case "set-speed":
+      return {
+        ...state,
+        speed: action.payload,
+      };
+    case "set-score":
+      return {
+        ...state,
+        score: action.payload,
+      };
+    case "set-turbo":
+      return {
+        ...state,
+        turbo: action.payload,
+      };
+    case "set-drop":
+      console.log("жесткое", state.tetramino.y);
+      const newTetramino = { ...state.tetramino };
+      while (!checkCollizion(state.board, newTetramino, 0, 1)) {
+        newTetramino.y += 1;
+      }
+      return { ...state, tetramino: newTetramino };
     default:
       return state;
   }

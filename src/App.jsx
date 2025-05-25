@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useReducer } from "react";
+import React, { useEffect, useCallback, useReducer } from "react";
 import Board from "./components/Board";
 import Display from "./components/Display";
 import StartBtn from "./components/StartBtn";
@@ -6,19 +6,15 @@ import NextTetramino from "./components/NextTetramino";
 import { checkCollizion } from "./utils/utils";
 import "./scss/app.scss";
 
-import { createBoard } from "./utils/gameBoard";
-import { createTetramino } from "./utils/tetraminosRand";
-import { tetrtaminoReducer, initialState } from "./utils/tetrisReducer";
-import { useWhyDidYouUpdate } from "./utils/useWhyDidYouUpdate";
+import { tetraminoReducer, initialState } from "./utils/tetrisReducer";
 
 function App() {
   const [tetraminoState, tetraminoDispatch] = useReducer(
-    tetrtaminoReducer,
+    tetraminoReducer,
     initialState
   );
-  const { board, tetramino, nextTetramino, isPlaying } = tetraminoState;
-  const [speed, setSpeed] = useState(800);
-  const [score, setScore] = useState(0);
+  const { board, tetramino, nextTetramino, isPlaying, score, speed, turbo, totalLinesCleared } =
+    tetraminoState;
 
   const moveLeft = useCallback(() => {
     if (!isPlaying) return;
@@ -60,12 +56,16 @@ function App() {
           moveRight();
           break;
         case "ArrowDown":
-          setSpeed(100);
+          //мягкое падение
+          tetraminoDispatch({ type: "set-turbo", payload: true });
           // нужно будет отслеживать нажата ли кнопка вниз в тот момент, когда мы добавляем упавшую фигуру на доску
-          setScore((prev) => prev + 1);
           break;
         case "ArrowUp":
           rotate();
+          break;
+        case " ":
+          //жесткое падение
+          tetraminoDispatch({type: "set-drop"})
           break;
         default:
           break;
@@ -74,7 +74,7 @@ function App() {
 
     const handleKeyUp = (event) => {
       if (event.key === "ArrowDown") {
-        setSpeed(800);
+        tetraminoDispatch({ type: "set-turbo", payload: false });
       }
     };
 
@@ -88,14 +88,14 @@ function App() {
 
   useEffect(() => {
     let interval;
-    console.log(1);
     if (isPlaying) {
+      const currentSpeed = turbo ? speed * 0.1 : speed;
       interval = setInterval(() => {
         tetraminoDispatch({ type: "move-down" });
-      }, speed);
+      }, currentSpeed);
     }
     return () => clearInterval(interval);
-  }, [isPlaying, speed]);
+  }, [isPlaying, speed, turbo]);
 
   const handleStart = () => {
     tetraminoDispatch({ type: "reset-game" });
@@ -129,7 +129,7 @@ function App() {
     <div id="root">
       <Board board={displayBoard} />
       <aside>
-        <Display text={`Score: ${score}`} />
+        <Display text={`Score: ${score}`}/>
         <NextTetramino
           shape={nextTetramino.shape}
           color={nextTetramino.color}

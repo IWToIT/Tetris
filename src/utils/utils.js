@@ -25,22 +25,22 @@ export const checkCollizion = (board, tetramino, moveX = 0, moveY = 0) => {
 };
 
 export const clearLines = (board) => {
-    let linesCleared = 0;
-    const newBoard = board.filter((row) => {
-      const isLineFull = !row.some(
-        (cell) =>
-          cell === "0" || (typeof cell === "object" && cell.type === "0")
-      );
-      if (isLineFull) {
-        linesCleared++;
-        return false;
-      }
-      return true;
-    });
-
-    for (let i = 0; i < linesCleared; i++) {
-      newBoard.unshift(new Array(board[0].length).fill("0"));
+  let linesCleared = 0;
+  console.log(linesCleared);
+  const newBoard = board.filter((row) => {
+    const isLineFull = !row.some(
+      (cell) => cell === "0" || (typeof cell === "object" && cell.type === "0")
+    );
+    if (isLineFull) {
+      linesCleared++;
+      return false;
     }
+    return true;
+  });
 
-    return { newBoard, linesCleared };
-  };
+  for (let i = 0; i < linesCleared; i++) {
+    newBoard.unshift(new Array(board[0].length).fill("0"));
+  }
+
+  return { newBoard, linesCleared };
+};
