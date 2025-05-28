@@ -97,6 +97,12 @@ function App() {
     return () => clearInterval(interval);
   }, [isPlaying, speed, turbo]);
 
+  useEffect(() => {
+    if (!isPlaying && score > 0) {
+      alert(`Game Over! Score: ${score}`);
+    }
+  }, [isPlaying, score]);
+
   const handleStart = () => {
     tetraminoDispatch({ type: "reset-game" });
   };

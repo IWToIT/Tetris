@@ -11,6 +11,7 @@ export const initialState = {
   speed: 800,
   turbo: false,
   totalLinesCleared: 0,
+  linesSinceLastSpeed: 0,
 };
 
 /**
@@ -60,12 +61,22 @@ export function tetraminoReducer(state, action) {
         const points = [0, 100, 300, 500, 800][linesCleared];
         const newScore = state.score + points;
 
+        // Общий счетчик (никогда не обнуляется)
         const newTotalLinesCleared = state.totalLinesCleared + linesCleared;
-        const newSpeed =
-          newTotalLinesCleared >= 4
-            ? state.speed - state.speed * 0.1
-            : state.speed;
-        console.log(state.totalLinesCleared);
+
+        // Временный счетчик (сбрасывается после 4)
+        const newLinesSinceLastSpeed = state.linesSinceLastSpeed + linesCleared;
+
+        // Проверяем, набрали ли 4 линии
+        const shouldIncreaseSpeed = newLinesSinceLastSpeed >= 4;
+
+        // Увеличиваем скорость на 10%
+        const newSpeed = shouldIncreaseSpeed ? state.speed * 0.9 : state.speed;
+
+        // Сбрасываем, если достигли 4 линий
+        const resetLines = shouldIncreaseSpeed
+          ? newLinesSinceLastSpeed - 4
+          : newLinesSinceLastSpeed;
 
         return {
           ...state,
@@ -76,6 +87,7 @@ export function tetraminoReducer(state, action) {
           score: newScore,
           speed: newSpeed,
           totalLinesCleared: newTotalLinesCleared,
+          linesSinceLastSpeed: resetLines,
         };
         // TODO: реализовать подсчет очков +
         // if (linesCleared > 0) {
@@ -83,9 +95,6 @@ export function tetraminoReducer(state, action) {
         //   setScore((prev) => prev + points);
         // }
       }
-
-      // TODO: перенести в App.jsx
-      // alert("Game Over!");
     }
     case "move-left":
       return {
