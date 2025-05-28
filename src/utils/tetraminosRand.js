@@ -52,14 +52,14 @@ export const tetraminos = {
   },
 };
 
-export const createTetramino = () => {
+export const createTetramino = (props) => {
   const tetraminoKeys = Object.keys(tetraminos)
   const rand = tetraminoKeys[Math.floor(Math.random() * tetraminoKeys.length)]
   const selectedTetramino = tetraminos[rand];
   return {
     shape: selectedTetramino.shape,
-    x: Math.floor(BOARD_WIDTH/2) - 1,
-    y: 0,
+    x: props?.x ?? Math.floor(BOARD_WIDTH/2) - 1,
+    y: props?.y ?? 0,
     type: rand,
     color: selectedTetramino.color,
   }
