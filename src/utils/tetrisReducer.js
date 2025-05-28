@@ -171,3 +171,18 @@ export function tetraminoReducer(state, action) {
       return state;
   }
 }
+
+const str = "A man a plan a canal Panama"
+function isPalindrom (el) {
+  const cleanedStr = el.replace(/\s/g, '').toLowerCase()
+  console.log(cleanedStr)
+  const reverseString = cleanedStr.split('').reverse().join('')
+  console.log(reverseString)
+  if(reverseString === cleanedStr) {
+    return 'yes';
+  } else {
+    return 'no'
+  }
+}
+
+isPalindrom(str);
