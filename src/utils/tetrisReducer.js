@@ -186,3 +186,13 @@ function isPalindrom (el) {
 }
 
 isPalindrom(str);
+
+const baseString = "I like cats. Cats are great!";
+
+function replaceWord(s) {
+  const replacer = /\bcats\b/gi;
+  const updateString = s.replace(replacer, "dogs")
+  return updateString
+}
+
+replaceWord(baseString)
