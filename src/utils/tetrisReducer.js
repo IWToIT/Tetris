@@ -172,16 +172,16 @@ export function tetraminoReducer(state, action) {
   }
 }
 
-const str = "A man a plan a canal Panama"
-function isPalindrom (el) {
-  const cleanedStr = el.replace(/\s/g, '').toLowerCase()
-  console.log(cleanedStr)
-  const reverseString = cleanedStr.split('').reverse().join('')
-  console.log(reverseString)
-  if(reverseString === cleanedStr) {
-    return 'yes';
+const str = "A man a plan a canal Panama";
+function isPalindrom(el) {
+  const cleanedStr = el.replace(/\s/g, "").toLowerCase();
+  console.log(cleanedStr);
+  const reverseString = cleanedStr.split("").reverse().join("");
+  console.log(reverseString);
+  if (reverseString === cleanedStr) {
+    return "yes";
   } else {
-    return 'no'
+    return "no";
   }
 }
 
@@ -191,8 +191,25 @@ const baseString = "I like cats. Cats are great!";
 
 function replaceWord(s) {
   const replacer = /\bcats\b/gi;
-  const updateString = s.replace(replacer, "dogs")
-  return updateString
+  const updateString = s.replace(replacer, "dogs");
+  return updateString;
 }
 
-replaceWord(baseString)
+replaceWord(baseString);
+
+// const arr = [1, 2, 3, 4, 235, 876, 102, 34];
+
+// function sumArray(ar) {
+//   let sum = 0;
+//   for (i = 0; i < ar.length; i++) {
+//     sum += ar[i];
+//   }
+//   return sum;
+// }
+
+const arr = [1, 2, 3, 4, 235, 876, 102, 34];
+function sumArray(ar) {
+  return ar.reduce((sum, num) => sum + num, 0);
+}
+
+sumArray(arr);
