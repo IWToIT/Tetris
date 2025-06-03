@@ -12,12 +12,13 @@ export const initialState = {
   turbo: false,
   totalLinesCleared: 0,
   linesSinceLastSpeed: 0,
+  musicPlaying: false,
 };
 
 /**
  * reducer
  * - всегда возвращает какой-то стейт
- * - всегда возвращает новый объект состояния (почему?)
+ * - всегда возвращает новый объект состояния (почему?) потому что реакту это нужно для отслеживания изменений
  *
  */
 export function tetraminoReducer(state, action) {
@@ -167,6 +168,29 @@ export function tetraminoReducer(state, action) {
         newTetramino.y += 1;
       }
       return { ...state, tetramino: newTetramino };
+    case "start-game":
+      return {
+        ...initialState,
+        isPlaying: true,
+        musicPlaying: false,
+      };
+    case "stop-game":
+      return {
+        ...state,
+        isPlaying: false,
+        musicPlaying: false,
+      };
+    case "play-music":
+      return {
+        ...state,
+        musicPlaying: true,
+      };
+    case "stop-music":
+      return {
+        ...state,
+        musicPlaying: false,
+      };
+
     default:
       return state;
   }

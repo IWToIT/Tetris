@@ -5,7 +5,6 @@ import StartBtn from "./components/StartBtn";
 import NextTetramino from "./components/NextTetramino";
 import { checkCollizion } from "./utils/utils";
 import "./scss/app.scss";
-
 import { tetraminoReducer, initialState } from "./utils/tetrisReducer";
 
 function App() {
@@ -13,8 +12,16 @@ function App() {
     tetraminoReducer,
     initialState
   );
-  const { board, tetramino, nextTetramino, isPlaying, score, speed, turbo, totalLinesCleared } =
-    tetraminoState;
+  const {
+    board,
+    tetramino,
+    nextTetramino,
+    isPlaying,
+    score,
+    speed,
+    turbo,
+    totalLinesCleared,
+  } = tetraminoState;
 
   const moveLeft = useCallback(() => {
     if (!isPlaying) return;
@@ -65,7 +72,7 @@ function App() {
           break;
         case " ":
           //жесткое падение
-          tetraminoDispatch({type: "set-drop"})
+          tetraminoDispatch({ type: "set-drop" });
           break;
         default:
           break;
@@ -103,10 +110,6 @@ function App() {
     }
   }, [isPlaying, score]);
 
-  const handleStart = () => {
-    tetraminoDispatch({ type: "reset-game" });
-  };
-
   const displayBoard = board.map((row) => [...row]);
 
   if (tetramino && tetramino.shape) {
@@ -135,12 +138,16 @@ function App() {
     <div id="root">
       <Board board={displayBoard} />
       <aside>
-        <Display text={`Score: ${score}`}/>
+        <Display text={`Score: ${score}`} />
         <NextTetramino
           shape={nextTetramino.shape}
           color={nextTetramino.color}
         />
-        <StartBtn callback={handleStart} />
+        <StartBtn
+          isPlaying={tetraminoState.isPlaying}
+          musicPlaying={tetraminoState.musicPlaying}
+          dispatch={tetraminoDispatch}
+        />
       </aside>
     </div>
   );
