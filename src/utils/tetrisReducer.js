@@ -58,22 +58,18 @@ export function tetraminoReducer(state, action) {
         });
 
         const { newBoard: clearedBoard, linesCleared } = clearLines(newBoard);
-        console.log("Линий очищено:", linesCleared);
+        // console.log("Линий очищено:", linesCleared);
         const points = [0, 100, 300, 500, 800][linesCleared];
         const newScore = state.score + points;
 
         // Общий счетчик (никогда не обнуляется)
         const newTotalLinesCleared = state.totalLinesCleared + linesCleared;
-
         // Временный счетчик (сбрасывается после 4)
         const newLinesSinceLastSpeed = state.linesSinceLastSpeed + linesCleared;
-
         // Проверяем, набрали ли 4 линии
         const shouldIncreaseSpeed = newLinesSinceLastSpeed >= 4;
-
         // Увеличиваем скорость на 10%
         const newSpeed = shouldIncreaseSpeed ? state.speed * 0.9 : state.speed;
-
         // Сбрасываем, если достигли 4 линий
         const resetLines = shouldIncreaseSpeed
           ? newLinesSinceLastSpeed - 4
@@ -162,7 +158,6 @@ export function tetraminoReducer(state, action) {
         turbo: action.payload,
       };
     case "set-drop":
-      console.log("жесткое", state.tetramino.y);
       const newTetramino = { ...state.tetramino };
       while (!checkCollizion(state.board, newTetramino, 0, 1)) {
         newTetramino.y += 1;
@@ -199,9 +194,9 @@ export function tetraminoReducer(state, action) {
 const str = "A man a plan a canal Panama";
 function isPalindrom(el) {
   const cleanedStr = el.replace(/\s/g, "").toLowerCase();
-  console.log(cleanedStr);
+  // console.log(cleanedStr);
   const reverseString = cleanedStr.split("").reverse().join("");
-  console.log(reverseString);
+  // console.log(reverseString);
   if (reverseString === cleanedStr) {
     return "yes";
   } else {

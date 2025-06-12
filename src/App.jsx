@@ -20,7 +20,6 @@ function App() {
     score,
     speed,
     turbo,
-    totalLinesCleared,
   } = tetraminoState;
 
   const moveLeft = useCallback(() => {

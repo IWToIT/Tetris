@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
-function Display({gameOver, text}) {
-  return (
-    <div className="display">{text}</div>
-  )
+function Display({ text }) {
+  return <div className="display">{text}</div>;
 }
 
-export default Display
+export default Display;

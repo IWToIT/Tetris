@@ -26,7 +26,7 @@ export const checkCollizion = (board, tetramino, moveX = 0, moveY = 0) => {
 
 export const clearLines = (board) => {
   let linesCleared = 0;
-  console.log(linesCleared);
+  // console.log(linesCleared);
   const newBoard = board.filter((row) => {
     const isLineFull = !row.some(
       (cell) => cell === "0" || (typeof cell === "object" && cell.type === "0")
