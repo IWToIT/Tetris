@@ -1,4 +1,4 @@
-@use '../variables' as sheet;
+@use "../variables" as sheet;
 
 .display {
   background-color: sheet.$black;
@@ -7,6 +7,17 @@
   text-align: center;
   padding: 10px;
   margin-bottom: 15px;
-  border: 2px solid sheet.$white;
+  border: none;
+  border-radius: 3px;
   width: 150px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 }

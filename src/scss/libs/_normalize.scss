@@ -20,6 +20,16 @@ body {
   color: sheet.$black;
 }
 
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
 a,
 span,
 p,
@@ -29,7 +39,7 @@ h2,
 h3,
 h4,
 h5 {
-  color: sheet.$black;
+  color: sheet.$white;
 }
 
 h1 {
